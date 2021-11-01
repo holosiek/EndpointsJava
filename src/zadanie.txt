@@ -1,0 +1,49 @@
+Dzień dobry,
+Proszę napisać prosty framework - serwer HTTP/REST z użyciem tylko standardowej biblioteki Javy, wersja 17.
+Serwer ma działać w oparciu o adnotowanie metod oraz kompilator adnotacji.
+Po uruchomieniu serwera, endpointy powinny się rejestrować "automatycznie" - jest to element projektu.
+Jeśli klient spróbuje odpytać jakiś niezarejestrowany endpoint, należy zwrócić jakiś sensowny kod błędu (404).
+Wszystike http requsty muszą być obsługiwany niezależnie od siebie.
+Serwer obługuje content-type tylko application/json, i powinien zwracać go w nagłówku.
+Adnotacja wskazująca metodę obsługującą endpoint: @com.barsznica.mikolaj.processor.Endpoint
+
+Parametry adnotacji:
+•	path (typ String) - ściażka dostępu do zasobu (np: /books)
+•	method (typ Enum) - metoda HTTP (jedno z: PUT, POST, GET, DELETE). Default value: GET
+Adnotacja wskazująca na parametr zawierający body zapytania htttp: @com.barsznica.mikolaj.processor.Body. Parametr musi być typu String. Jeśli metoda z adnotajca @com.barsznica.mikolaj.processor.Endpoint z httpMethodami PUT lub POST nie posiada parametru z adnotacją @com.barsznica.mikolaj.processor.Body, sytem nie powinin się kompilować.
+
+Adnotacja wskazująca fragment ścieżki zapytania http: @com.barsznica.mikolaj.processor.EndpointPath, z jednym parametrem Stringowym. Jeśli nazwa tego parametru nie znajdzie się w ścieżce otoczona nawiasami klamrowymi - system nie powinine się skompilować.
+
+Przykład:
+
+public class MyClass {
+  @Endpoint(path = "/books", method="GET")
+  public HttpAnswer getBooks() {
+    //kod zwracający książki. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację książek.
+  }
+
+  @com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="GET")
+    public HttpAnswer getBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id) {
+    //kod zwracający jedną książkę. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację książki.
+  }
+
+  @com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="DELETE")
+    public HttpAnswer deleteBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id) {
+    //kod usuwający książkę. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację statusu usunięcia.
+  }
+
+
+  @com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="POST")
+    public HttpAnswer addBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id, @com.barsznica.mikolaj.processor.Body String book) {
+    //kod dodający książkę. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację  dodanej książki (lub info o niepowodzeniu).
+  }
+
+@com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="PUT")
+  public HttpAnswer updateBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id, @com.barsznica.mikolaj.processor.Body String book) {
+  //kod modyfikujący książkę.HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację zmodyfikowanej książki (lub info o niepowodzeniu).
+  }
+}
+
+
+Serializowane / deseralizacja może odbywać się na zasadach opianych w https://gitlab.com/uj-zajecia/java-2021/zadania/03-collections , zadanie 2. Prosze spojrzeć na testy jako przykłady.
+Opcjonalnie może Pan użyć recordów jako punktu wyjścia do serializacji / deserilaizacji.
