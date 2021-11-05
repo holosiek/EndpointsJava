@@ -5,7 +5,7 @@ Po uruchomieniu serwera, endpointy powinny się rejestrować "automatycznie" - j
 Jeśli klient spróbuje odpytać jakiś niezarejestrowany endpoint, należy zwrócić jakiś sensowny kod błędu (404).
 Wszystike http requsty muszą być obsługiwany niezależnie od siebie.
 Serwer obługuje content-type tylko application/json, i powinien zwracać go w nagłówku.
-Adnotacja wskazująca metodę obsługującą endpoint: @com.barsznica.mikolaj.processor.Endpoint
+Adnotacja wskazująca metodę obsługującą endpoint: @Endpoint
 
 Parametry adnotacji:
 •	path (typ String) - ściażka dostępu do zasobu (np: /books)
@@ -21,25 +21,24 @@ public class MyClass {
   public HttpAnswer getBooks() {
     //kod zwracający książki. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację książek.
   }
-
-  @com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="GET")
-    public HttpAnswer getBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id) {
+  @Endpoint(path = "/books/{id}", method="GET")
+    public HttpAnswer getBook(@EndpointPath("id") int id) {
     //kod zwracający jedną książkę. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację książki.
   }
 
-  @com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="DELETE")
-    public HttpAnswer deleteBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id) {
+  @Endpoint(path = "/books/{id}", method="DELETE")
+    public HttpAnswer deleteBook(@EndpointPath("id") int id) {
     //kod usuwający książkę. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację statusu usunięcia.
   }
 
 
-  @com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="POST")
-    public HttpAnswer addBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id, @com.barsznica.mikolaj.processor.Body String book) {
+  @Endpoint(path = "/books/{id}", method="POST")
+    public HttpAnswer addBook(@EndpointPath("id") int id, @com.barsznica.mikolaj.processor.Body String book) {
     //kod dodający książkę. HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację  dodanej książki (lub info o niepowodzeniu).
   }
 
-@com.barsznica.mikolaj.processor.Endpoint(path = "/books/{id}", method="PUT")
-  public HttpAnswer updateBook(@com.barsznica.mikolaj.processor.EndpointPath("id") int id, @com.barsznica.mikolaj.processor.Body String book) {
+@Endpoint(path = "/books/{id}", method="PUT")
+  public HttpAnswer updateBook(@EndpointPath("id") int id, @com.barsznica.mikolaj.processor.Body String book) {
   //kod modyfikujący książkę.HttpAnswer ma zawierać kod odpowiedzi Http, oraz Stringa - JSonową reprezentację zmodyfikowanej książki (lub info o niepowodzeniu).
   }
 }
