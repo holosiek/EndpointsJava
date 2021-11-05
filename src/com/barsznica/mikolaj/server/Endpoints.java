@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Endpoints
 {
-    private static HashMap<String, Object> data = new HashMap<>();
+    private static final HashMap<String, Object> data = new HashMap<>();
 
     static {
         data.put("test", new ArrayList<>());
@@ -15,7 +15,7 @@ public class Endpoints
     private static Map<String, String> parseBody(String body) {
         var bodyMap = new LinkedHashMap<String, String>();
 
-        for(String keyValue : body.split(" *& *"))
+        for (String keyValue : body.split(" *& *"))
         {
             String[] pairs = keyValue.split(" *= *", 2);
             bodyMap.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
@@ -24,6 +24,7 @@ public class Endpoints
         return bodyMap;
     }
 
+    @SuppressWarnings("unchecked")
     @Endpoint(path = "/test", method = HttpMethod.Get)
     public static HttpAnswer TestGet()
     {
@@ -35,13 +36,14 @@ public class Endpoints
         return new HttpAnswer(200, "{\"Error\": \"'test' key doesn't exists\"}");
     }
 
+    @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book", method = HttpMethod.Post)
     public static HttpAnswer TestNewBookPost(@Body String body)
     {
         if (data.containsKey("test"))
         {
             var parsedBody = parseBody(body);
-            if(parsedBody.containsKey("name") && parsedBody.containsKey("description") && parsedBody.containsKey("genre"))
+            if (parsedBody.containsKey("name") && parsedBody.containsKey("description") && parsedBody.containsKey("genre"))
             {
                 var name = parsedBody.get("name");
                 var description = parsedBody.get("description");
@@ -60,6 +62,7 @@ public class Endpoints
         return new HttpAnswer(200, "{\"Error\": \"'test' key doesn't exists\"}");
     }
 
+    @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book/{name}", method = HttpMethod.Get)
     public static HttpAnswer TestNewBookGet(@EndpointPath(parameter = "name") String name)
     {
@@ -81,6 +84,7 @@ public class Endpoints
         return new HttpAnswer(200, "{\"Error\": \"'test' key doesn't exists\"}");
     }
 
+    @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book", method = HttpMethod.Put)
     public static HttpAnswer TestNewBookPut(@Body String body)
     {
@@ -88,7 +92,7 @@ public class Endpoints
         {
             var parsedBody = parseBody(body);
 
-            if(parsedBody.containsKey("name") && parsedBody.containsKey("description") && parsedBody.containsKey("genre"))
+            if (parsedBody.containsKey("name") && parsedBody.containsKey("description") && parsedBody.containsKey("genre"))
             {
                 var array = (ArrayList<Object>)data.get("test");
 
@@ -102,6 +106,7 @@ public class Endpoints
                         hash.replace("name", parsedBody.get("name"));
                         hash.replace("description", parsedBody.get("description"));
                         hash.replace("genre", parsedBody.get("genre"));
+
                         return new HttpAnswer(200, JsonParser.toJson(hash));
                     }
                 }
@@ -115,6 +120,7 @@ public class Endpoints
         return new HttpAnswer(200, "{\"Error\": \"'test' key doesn't exists\"}");
     }
 
+    @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book/{name}", method = HttpMethod.Delete)
     public static HttpAnswer TestNewBookDelete(@EndpointPath(parameter = "name") String name)
     {

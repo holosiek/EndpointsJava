@@ -17,13 +17,20 @@ public class JsonParser
 
     private static String toJson(String key, List<?> list)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
 
+        addDataToStringBuilder(list, stringBuilder);
+
+        return "\"" + key + "\": [" + stringBuilder + "]";
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void addDataToStringBuilder(List<?> list, StringBuilder stringBuilder) {
         for (var value : list)
         {
             if (value instanceof String)
             {
-                stringBuilder.append("\"" + ((String) value).replaceAll("\"", "\\\\\"") + "\"");
+                stringBuilder.append("\"").append(((String) value).replaceAll("\"", "\\\\\"")).append("\"");
             }
             else if(value instanceof Map)
             {
@@ -35,42 +42,26 @@ public class JsonParser
             }
             stringBuilder.append(",");
         }
+
         if (list.size() > 0)
         {
             stringBuilder.deleteCharAt(stringBuilder.length()-1);
         }
-        return "\"" + key + "\": [" + stringBuilder + "]";
     }
 
     public static String toJson(List<?> list)
     {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (var value : list)
-        {
-            if (value instanceof String)
-            {
-                stringBuilder.append("\"" + ((String) value).replaceAll("\"", "\\\\\"") + "\"");
-            }
-            else if(value instanceof Map)
-            {
-                stringBuilder.append(toJson((Map<String, ?>)value));
-            }
-            else
-            {
-                stringBuilder.append(value.toString());
-            }
-            stringBuilder.append(",");
-        }
-        if (list.size() > 0)
-        {
-            stringBuilder.deleteCharAt(stringBuilder.length()-1);
-        }
+        addDataToStringBuilder(list, stringBuilder);
+
         return "[" + stringBuilder + "]";
     }
 
+    @SuppressWarnings("unchecked")
     public static String toJson(Map<String, ?> map) {
         StringBuilder stringBuilder = new StringBuilder();
+
         if (map == null || map.keySet().size() == 0)
         {
             return "{}";
@@ -91,7 +82,7 @@ public class JsonParser
             }
             else if(value instanceof Map)
             {
-                stringBuilder.append("\"" + key + "\": " + toJson((Map<String, ?>) value));
+                stringBuilder.append("\"").append(key).append("\": ").append(toJson((Map<String, ?>) value));
             }
             else
             {
