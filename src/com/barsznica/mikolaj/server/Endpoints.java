@@ -1,17 +1,10 @@
 package com.barsznica.mikolaj.server;
-
 import com.barsznica.mikolaj.commonap.*;
-import com.barsznica.mikolaj.processor.*;
-
 import java.util.*;
 
 public class Endpoints
 {
-    private static final HashMap<String, Object> data = new HashMap<>();
-
-    static {
-        data.put("test", new ArrayList<>());
-    }
+    private final HashMap<String, Object> data = new HashMap<>();
 
     private static Map<String, String> parseBody(String body) {
         var bodyMap = new LinkedHashMap<String, String>();
@@ -25,9 +18,14 @@ public class Endpoints
         return bodyMap;
     }
 
+    public Endpoints()
+    {
+        data.put("test", new ArrayList<>());
+    }
+
     @SuppressWarnings("unchecked")
     @Endpoint(path = "/test", method = HttpMethod.Get)
-    public static HttpAnswer TestGet()
+    public HttpAnswer TestGet()
     {
         if (data.containsKey("test"))
         {
@@ -39,7 +37,7 @@ public class Endpoints
 
     @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book", method = HttpMethod.Post)
-    public static HttpAnswer TestNewBookPost(@Body String body)
+    public HttpAnswer TestNewBookPost(@Body String body)
     {
         if (data.containsKey("test"))
         {
@@ -65,7 +63,7 @@ public class Endpoints
 
     @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book/{name}", method = HttpMethod.Get)
-    public static HttpAnswer TestNewBookGet(@EndpointPath(parameter = "name") String name)
+    public HttpAnswer TestNewBookGet(@EndpointPath(parameter = "name") String name)
     {
         if (data.containsKey("test"))
         {
@@ -87,7 +85,7 @@ public class Endpoints
 
     @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book", method = HttpMethod.Put)
-    public static HttpAnswer TestNewBookPut(@Body String body)
+    public HttpAnswer TestNewBookPut(@Body String body)
     {
         if (data.containsKey("test"))
         {
@@ -123,7 +121,7 @@ public class Endpoints
 
     @SuppressWarnings("unchecked")
     @Endpoint(path = "/test/book/{name}", method = HttpMethod.Delete)
-    public static HttpAnswer TestNewBookDelete(@EndpointPath(parameter = "name") String name)
+    public HttpAnswer TestNewBookDelete(@EndpointPath(parameter = "name") String name)
     {
         if (data.containsKey("test"))
         {
