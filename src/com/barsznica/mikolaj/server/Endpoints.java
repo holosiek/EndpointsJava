@@ -6,18 +6,6 @@ public class Endpoints
 {
     private final HashMap<String, Object> data = new HashMap<>();
 
-    private static Map<String, String> parseBody(String body) {
-        var bodyMap = new LinkedHashMap<String, String>();
-
-        for (String keyValue : body.split(" *& *"))
-        {
-            String[] pairs = keyValue.split(" *= *", 2);
-            bodyMap.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
-        }
-
-        return bodyMap;
-    }
-
     public Endpoints()
     {
         data.put("test", new ArrayList<>());
@@ -41,7 +29,7 @@ public class Endpoints
     {
         if (data.containsKey("test"))
         {
-            var parsedBody = parseBody(body);
+            var parsedBody = BodyParser.parseBody(body);
             if (parsedBody.containsKey("name") && parsedBody.containsKey("description") && parsedBody.containsKey("genre"))
             {
                 var name = parsedBody.get("name");
@@ -89,7 +77,7 @@ public class Endpoints
     {
         if (data.containsKey("test"))
         {
-            var parsedBody = parseBody(body);
+            var parsedBody = BodyParser.parseBody(body);
 
             if (parsedBody.containsKey("name") && parsedBody.containsKey("description") && parsedBody.containsKey("genre"))
             {

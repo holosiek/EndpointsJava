@@ -1,14 +1,12 @@
 package com.barsznica.mikolaj.server;
 
-import com.sun.net.httpserver.HttpHandler;
+public class Server
+{
+    private final static int PORT = 8000;
+    private final static int MAX_LISTENERS = 0;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.InetSocketAddress;
-
-public class Server {
     public static void main(String[] args)
     {
-        var server = new HttpServer(8000, 0);
+        var server = new HttpServer(PORT, MAX_LISTENERS);
     }
 }

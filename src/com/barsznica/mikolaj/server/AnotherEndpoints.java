@@ -6,32 +6,20 @@ public class AnotherEndpoints
 {
     private final HashMap<String, Object> data = new HashMap<>();
 
-    private static Map<String, String> parseBody(String body) {
-        var bodyMap = new LinkedHashMap<String, String>();
-
-        for (String keyValue : body.split(" *& *"))
-        {
-            String[] pairs = keyValue.split(" *= *", 2);
-            bodyMap.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
-        }
-
-        return bodyMap;
-    }
-
     public AnotherEndpoints()
     {
-        data.put("ser", new ArrayList<>());
+        data.put("buildings", new ArrayList<>());
     }
 
     @SuppressWarnings("unchecked")
-    @Endpoint(path = "/ser", method = HttpMethod.Get)
-    public HttpAnswer SerGet()
+    @Endpoint(path = "/buildings", method = HttpMethod.Get)
+    public HttpAnswer buildingsGet()
     {
-        if (data.containsKey("ser"))
+        if (data.containsKey("buildings"))
         {
-            return new HttpAnswer(200, JsonParser.toJson((ArrayList<Object>)data.get("serrrrrrrrrrrrrrrrr")));
+            return new HttpAnswer(200, JsonParser.toJson((ArrayList<Object>)data.get("buildings")));
         }
 
-        return new HttpAnswer(200, "{\"Error\": \"'ser' key doesn't exists\"}");
+        return new HttpAnswer(200, "{\"Error\": \"'buildings' key doesn't exists\"}");
     }
 }
